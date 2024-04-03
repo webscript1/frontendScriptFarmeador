@@ -1,0 +1,40 @@
+.container_form{
+    background-color: #181a1b;
+}
+.container_form form div input{
+    border: none;
+    border-style: none;
+    border-width: 0;
+    color: #8a8a87;
+    background-color: #2b2a33;
+}
+.text-color{
+    color: #8a8a87 ;
+}
+input:focus {
+    outline: none; 
+    border-color: transparent;
+  }
+.btn{
+   
+    background-color: #ffb11a;
+}
+.btn:hover{
+    opacity: 0.85;
+}
+.crear-user a{
+    transition: all 300ms;
+}
+
+.crear-user a:hover{
+    cursor: pointer;
+    opacity: 0.85;
+    border-bottom: 1px solid #8a8a87;
+}
+a{
+    text-decoration: none;
+}
+
+.text-color{
+    color: #8a8a87 ;
+}

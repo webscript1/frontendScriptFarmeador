@@ -1,0 +1,106 @@
+
+
+ <ng-container *ngIf="!loading">
+    <section class="mx-3 px-2 row justify-content-center">
+        <h3 class="text-secondary text-center mt-1">
+            script en desarrollo :)
+        </h3>
+        <div>
+            <ul class="d-flex justify-content-center flex-wrap">
+                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='activador' }" (click)="navegation('activador')">activator</li>
+                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='instancias' }" (click)="navegation('instancias')">activatedSymbols({{list_instancias.length}})</li>
+                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='info' }" (click)="navegation('info')">infoPositions({{list_orders_gestionAtr.length}})</li>
+                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='openPosition' }" (click)="navegation('openPosition')">openPosition({{list_position_open.length}})</li>    
+            </ul>
+        </div>
+       <ng-container>
+        <form class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4" [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
+            <div [hidden]="selectedItem!=='activador'" class="table-responsive  mt-1 p-3">
+                <div class="input-group mb-3 bg-secondary">
+                    <select class="form-control " (change)="selectSide($event)" formControlName="side">
+                        <option selected disabled value="">Seleccione una opción</option>
+                        <option value="Buy">Long</option>
+                        <option value="Sell">Short</option>
+                    </select>
+                </div>
+                <table class="table table-dark ">
+                    <thead >
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: red;">
+                        <tr>
+                            <td>symbol</td>
+                            <td><input  name="symbol" type="text" class="form-control" formControlName="symbol"></td>
+                        </tr>
+                        <tr>
+                            <td class="ms-2">Account size</td>
+                            <td><input  class="form-control" type="number" name="acountsize" formControlName="acountsize"></td>
+                            <td><span class="ps-2">$</span></td>
+                        </tr>
+                        <tr>
+                            <td>Risk</td>
+                            <td><input  class="form-control" type="number" name="risk" formControlName="risk"></td>
+                            <td><span class="ps-2">%</span></td>
+                        </tr>
+                       
+                        <tr>
+                            <td>tp/relation</td>
+                            <td><input   name="tpRelation" class="form-control" type="number" formControlName="tpRelation"></td>
+                        </tr>
+                      
+                    </tbody>
+                </table>
+                <ng-container *ngIf="message">
+                    <div [ngClass]="{'alert-success': code === 200, 'alert-danger': code !== 200}" class="alert  alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                </ng-container>
+                <div *ngIf="!loadingActivatedBot">
+                    <button [disabled]="miFormulario.invalid"  type="submit" [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                                        'btn-danger':gestion_atr.side==='Sell',
+                                        'btn-secondary': gestion_atr.side !== 'Buy' && gestion_atr.side !== 'Sell'}"  type="submit" class="btn btn-success col-12">
+                    Activar script
+                    </button>
+                  
+                  </div>
+                  <div *ngIf="loadingActivatedBot">
+                    <button  [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                    'btn-danger':gestion_atr.side==='Sell'}" class="btn  col-12" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span class="visually-hidden" role="status">Loading...</span>
+                      </button>
+                      
+                  </div>
+            
+            </div>
+        </form>
+       </ng-container>
+      
+         <ng-container>
+        <div [hidden]="selectedItem!=='instancias'">
+            <app-activated-symbols [instancias]="list_instancias"></app-activated-symbols>
+        </div>
+       
+       </ng-container>
+     
+      
+    
+       <ng-container>
+         <div [hidden]="selectedItem!=='info'">
+            <app-info-position [list_orders_gestionAtr]="list_orders_gestionAtr"></app-info-position>
+         </div>
+       </ng-container>
+        
+       <ng-container>
+        <div [hidden]="selectedItem!=='openPosition'">
+            <app-open-position [list_position_open]="list_position_open" ></app-open-position>
+        </div>
+      </ng-container>
+    </section>
+</ng-container>
+

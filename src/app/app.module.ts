@@ -1,16 +1,44 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; 
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ActivatedSymbolsComponent } from './components/activated-symbols/activated-symbols.component';
+import { BotInterfazComponent } from './components/bot-interfaz/bot-interfaz.component';
+import { CalculadoraGestionComponent } from './components/calculadora-gestion/calculadora-gestion.component';
+import { InfoPositionComponent } from './components/info-position/info-position.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { OpenPositionComponent } from './components/open-position/open-position.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
+import { SingInComponent } from './components/sing-in/sing-in.component';
+import { SingUpComponent } from './components/sing-up/sing-up.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ActivatedSymbolsComponent,
+    BotInterfazComponent,
+    CalculadoraGestionComponent,
+    InfoPositionComponent,
+    MenuComponent,
+    OpenPositionComponent,
+    SingInComponent,
+    SingUpComponent
   ],
   imports: [
+    FormsModule,
+    HttpClientModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    ReactiveFormsModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+
+body{
+    background-color: #212529;
+   
+}
+
+.circleGreen {
+    float: left;
+    margin-top: 5px;
+    margin-right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: #00FF00;; /* Cambiar el color aquí */
+    border-radius: 50%;
+  }
+  .circle {
+    float: left;
+    margin-top: 5px;
+    margin-right: 4px;
+    width: 15px;
+    height: 15px;
+    background-color: #00FF00;; /* Cambiar el color aquí */
+    border-radius: 50%;
+  }
+  .long{
+    background-color: green;
+  }
+  .short{
+    background-color: red;
+  }
+
+
+  .circleRed {
+    float: left;
+    margin-top: 5px;
+    margin-right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: red; /* Cambiar el color aquí */
+    border-radius: 50%;
+  }

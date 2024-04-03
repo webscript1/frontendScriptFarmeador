@@ -1,0 +1,34 @@
+.container-gestion{
+    background-color: #181c20;
+}
+table tbody tr{
+    background-color: #181c20 !important;
+}
+tr {
+   border-color: #212529;
+  }
+
+  ul {
+   
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    color: #DCD9D4;
+    transition: all 300ms;
+  }
+
+  li:hover{
+    opacity: 0.8;
+  }
+
+  
+  .linkactive {
+    transition: all 300ms;
+   border-bottom: 1px solid white;
+  }
+// regular style toast
