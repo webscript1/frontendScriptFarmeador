@@ -1,14 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { activatedSymbol, gestionAtr } from '../../interfaces/interfaces-gestion';
 
 import { SuperTrendService } from '../../services/superTrend/super-trend.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-activated-symbols',
   templateUrl: './activated-symbols.component.html',
   styleUrls: ['./activated-symbols.component.scss']
 })
-export class ActivatedSymbolsComponent {
+export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
   @Input()
   instancias: Array<gestionAtr> = [];
 
@@ -16,14 +17,25 @@ export class ActivatedSymbolsComponent {
   public idInstanciaAEliminar:any
   public loadingDeleteInstancia:boolean
   public dstosInstanciaAeliminar:gestionAtr | undefined 
+  public listSubcriptions:Array<Subscription>
 
   constructor(
-    private _botServoce:SuperTrendService
+    private _botService:SuperTrendService
   ){
    this.activatedSymbol=[]
    this.loadingDeleteInstancia=false
    this.idInstanciaAEliminar=''
+   this.listSubcriptions=[]
+
    
+  }
+  ngOnDestroy(): void {
+   this.listSubcriptions.forEach((item)=>{
+             item.unsubscribe()
+   })
+  }
+  ngOnInit(): void {
+    
   }
 
    convertirFechaUTCALocal(fechaUTC: string): string {
@@ -38,7 +50,7 @@ export class ActivatedSymbolsComponent {
     const id=this.dstosInstanciaAeliminar.id
     this.loadingDeleteInstancia=true
     this.idInstanciaAEliminar=this.dstosInstanciaAeliminar.id
-    this._botServoce.deleteInstancia(id).subscribe(
+   let subcription1= this._botService.deleteInstancia(id).subscribe(
       response=>{
         console.log(response)
         if(response.code===200){
@@ -55,11 +67,26 @@ export class ActivatedSymbolsComponent {
         this.idInstanciaAEliminar=''
       }
     )
+    this.listSubcriptions.push(subcription1)
    }
+   
   }
 
   conFirmarDeleteInstancia(data:gestionAtr){
     this.dstosInstanciaAeliminar=data
+  }
+
+  getInstanciasWs(){
+   let subcription2= this._botService.get_instancias_script().subscribe(
+      response=>{
+        console.log('instancias ws')
+        console.log(response)
+      },
+      error=>{
+        console.log(error)
+      }
+    )
+    this.listSubcriptions.push(subcription2)
   }
 
 }

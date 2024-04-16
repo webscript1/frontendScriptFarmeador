@@ -34,7 +34,7 @@ export class SuperTrendService {
   let headers= new HttpHeaders().set('Content-Type','application/json');
   headers= headers.append('Authorization', "Bearer "+ this.token);
 
-  return this.http.post(this.url+this.version+'/bot/activar-script',params, {headers:headers});
+  return this.http.post(this.url+this.version+'/bot/activar-script-bybit',params, {headers:headers});
 }
 get_instancias_script(): Observable<any>{
   this.token=Global.token()
