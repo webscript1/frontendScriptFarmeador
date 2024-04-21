@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AudioService } from 'src/app/services/audio/audio.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WsService } from 'src/app/services/ws/ws.service';
+import { Global } from 'src/app/services/Global';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bot-interfaz',
@@ -25,8 +27,8 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
   public code:any
   public loading:boolean=true
   public list_orders_gestionAtr:Array<detallesGestion>
-  public list_position_open:Array<detallesGestion>
-  public list_position_open_local:Array<detallesGestion>=[]
+  public list_position_open:Array<{gestion:detallesGestion,candles:Array<any>}>
+
   miFormulario!: FormGroup;
 
 
@@ -35,7 +37,8 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
     private _superTrendService:SuperTrendService,
     private toastr: ToastrService,
     private audioService: AudioService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
 
   ){
     this.loadingActivatedBot=false
@@ -123,6 +126,12 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
           if(error.status===404){
             this.message=error.error.message
           }
+          if(error.status===401){
+          
+           
+            Global.removeToken()
+            this.router.navigate(['/'])
+          }
           this.code=500
           this.loadingActivatedBot=false
         }
@@ -140,6 +149,14 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
         }
       },
       error=>{
+  
+        console.log('estatus')
+        console.log(error.status)
+        if(error.status===401){
+          console.log('removiendo item ')
+         
+          Global.removeToken()
+        }
         console.log(error)
       }
     )
@@ -180,7 +197,10 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
       (data:any)=>{
         console.log('recibiendo data ws')
         if(data){
-          const info=JSON.parse(data)
+          let dataWs=JSON.parse(data)
+      
+          const info:detallesGestion=dataWs.gestion
+          let candles=dataWs.candles.reverse()
              // Mostrar notificación
        
           if(info){
@@ -192,7 +212,7 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
           this.audioService.playNotificationSound();
 
           if(detalleGestion){
-            this.list_position_open.unshift(detalleGestion)
+            this.list_position_open.unshift({gestion:detalleGestion,candles:candles})
           }
          
         }
@@ -230,9 +250,16 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
   get_list_positions_local(){
     const subscription =this._superTrendService.get_list_positions_local().subscribe(
       response=>{
-        console.log(response)
+     
          if(response.data.length>0){
-          this.list_position_open=response.data
+          
+          this.list_position_open=(response.data)
+          console.log('position open list local')
+          console.log(this.list_position_open)
+          this.list_position_open.forEach((item)=>{
+            item.gestion.date=this.convertirFechaUTCALocal(item.gestion.date)
+            item.candles.reverse()
+          })
          }
       },
       error=>{

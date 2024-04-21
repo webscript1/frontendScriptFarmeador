@@ -20,36 +20,48 @@
                       <td>price Sl</td>
                       <td>tp</td>
                       <td>sl</td>
+                      <td>candles</td>
                       <td></td>
                 </tr>
           </thead>
           <tbody class="table-group-divider">
                 <ng-container *ngFor="let order of list_position_open; let i=index">
-                      <tr [ngClass]="{'table-success': order.side==='Buy',
-                      'table-danger':order.side==='Sell'}" >
+                      <tr [ngClass]="{'table-success': order?.gestion?.side==='Buy',
+                      'table-danger':order?.gestion?.side ==='Sell'}" >
                             <td>{{i+1}}</td>
-                            <td>{{order.date}}</td>
-                            <td>{{order.symbol}}</td>
-                            <td>{{order.tick}}</td>
-                            <td>{{order.atr}}</td>
+                            <td>{{order?.gestion?.date}}</td>
+                            <td>{{order?.gestion?.symbol}}</td>
+                            <td>{{order?.gestion?.tick}}</td>
+                            <td>{{order?.gestion?.atr}}</td>
                             <td>
                                
                               
-                                 <div class="text-binance-last mb-1 d-block" [ngClass]="{'circleGreen': order.tendenciaDirection.trend==='long', 'circleRed': order.tendenciaDirection.trend==='short'}"></div>
+                                 <div class="text-binance-last mb-1 d-block" [ngClass]="{'circleGreen': order.gestion.tendenciaDirection.trend==='long', 'circleRed': order.gestion.tendenciaDirection.trend==='short'}"></div>
                                
-                                  <span *ngIf="order.tendenciaDirection.trend==='short'">Bajista</span>
-                                  <span *ngIf="order.tendenciaDirection.trend==='long'">Alcista</span>
-                                 <span class="d-block">priceLinea: {{order.tendenciaDirection.value}}$</span>
+                                  <span *ngIf="order.gestion.tendenciaDirection.trend==='short'">Bajista</span>
+                                  <span *ngIf="order.gestion.tendenciaDirection.trend==='long'">Alcista</span>
+                                 <span class="d-block">priceLinea: {{order.gestion.tendenciaDirection.value}}$</span>
                             </td>
-                            <td>{{order.entryPrice}}$</td>             
-                            <td>{{order.side}}</td>
-                            <td>{{order.qty}}</td>
-                            <td>{{order.tpPrecio}}$ <strong class="text-success">({{order.tpPorcentaje}}%)</strong></td>
-                            <td>{{order.stopLossPrice}}$ <strong class="text-danger">(-{{order.distanciaPorcentajeSl}}%)</strong></td>
-                            <td class="text-success">{{order.tp}}$</td>
-                            <td class="text-danger">{{order.sl}}$</td>
+                            <td>{{order.gestion. entryPrice}}$</td>             
+                            <td>{{order.gestion.side}}</td>
+                            <td>{{order.gestion.qty}}</td>
+                            <td>{{order.gestion.tpPrecio}}$ <strong class="text-success">({{order.gestion.tpPorcentaje}}%)</strong></td>
+                            <td>{{order.gestion.stopLossPrice}}$ <strong class="text-danger">(-{{order.gestion. distanciaPorcentajeSl}}%)</strong></td>
+                            <td class="text-success">{{order.gestion.tp}}$</td>
+                            <td class="text-danger">{{order.gestion.sl}}$</td>
+                            <td >
+                              toyal candles: ({{order.candles.length}}) 
+                              <div *ngFor="let candles of order.candles; let i=index" class="d-block">
+                                <li><strong> ({{i+1}}) date:{{convertirFechamilesegundosLocal(candles[0])}} </strong></li>
+                                <li >open:{{candles[1]}}</li>
+                                <li class="text-success">hight: {{candles[2]}}</li>
+                                <li class="text-danger">low: {{candles[3]}}</li>
+                                <li class="">close: {{candles[4]}}</li>
+                              </div>
+
+                            </td>
                             <td>
-                              <i (click)="conFirmarDeleteInstancia(order)"  data-bs-toggle="modal" data-bs-target="#deletePositionOdListLocal" class="bi bi-trash3"></i>
+                              <i (click)="conFirmarDeleteInstancia(order.gestion)"  data-bs-toggle="modal" data-bs-target="#deletePositionOdListLocal" class="bi bi-trash3"></i>
                              
                            
                             </td>

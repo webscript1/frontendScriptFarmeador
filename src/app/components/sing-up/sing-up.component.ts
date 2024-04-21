@@ -59,7 +59,7 @@ export class SingUpComponent implements OnInit {
 
   sing_up(){
     this.loading=true
-    this._userservice.sing_up(this.user).subscribe(
+    let subcription1=this._userservice.sing_up(this.user).subscribe(
       response=>{
         console.log(response)
         this.loading=false
@@ -73,6 +73,7 @@ export class SingUpComponent implements OnInit {
         this.loading=false
       }
     )
+    this.list_Subscription.push(subcription1)
   }
   onSubmit(){
     if (this.miFormulario.valid) {

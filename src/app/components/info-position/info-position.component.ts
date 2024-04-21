@@ -5,6 +5,7 @@ import { Socket } from 'ngx-socket-io';
 import { map } from 'rxjs/operators';
 import { Global } from 'src/app/services/Global';
 
+
 @Component({
   selector: 'app-info-position',
   templateUrl: './info-position.component.html',
@@ -16,7 +17,7 @@ export class InfoPositionComponent implements OnInit, AfterViewInit, OnDestroy{
 
   constructor(
   ){
-   this.list_orders_gestionAtr=[]
+   this.list_orders_gestionAtr=[].reverse()
   }
   ngOnDestroy(): void {
 
@@ -27,6 +28,14 @@ export class InfoPositionComponent implements OnInit, AfterViewInit, OnDestroy{
   ngOnInit(): void {
     
   }
+  convertirFechaUTCALocal(fechaUTC: string): string {
+   
+    const fechaUTCObjeto = new Date(fechaUTC);
+    const fechaLocalString = fechaUTCObjeto.toLocaleString();
+  
+    return fechaLocalString;
+  }
+ 
 
 
 

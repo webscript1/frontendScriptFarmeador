@@ -8,4 +8,7 @@ export const Global={
         }
         return null;
       },
+  removeToken:()=>{
+    localStorage.removeItem('token')
+  }
 }

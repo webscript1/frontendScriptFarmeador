@@ -3,6 +3,7 @@ import { activatedSymbol, gestionAtr } from '../../interfaces/interfaces-gestion
 
 import { SuperTrendService } from '../../services/superTrend/super-trend.service';
 import { Subscription } from 'rxjs';
+import { Global } from 'src/app/services/Global';
 
 @Component({
   selector: 'app-activated-symbols',
@@ -20,7 +21,8 @@ export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
   public listSubcriptions:Array<Subscription>
 
   constructor(
-    private _botService:SuperTrendService
+    private _botService:SuperTrendService,
+  
   ){
    this.activatedSymbol=[]
    this.loadingDeleteInstancia=false
@@ -63,6 +65,16 @@ export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
       },
       error=>{
         console.log(error)
+        if(error.error.code===404){
+          const index=this.instancias.findIndex((instancia)=> instancia.id===id )
+
+          if(index!==-1){
+            this.instancias.splice(index,1)
+          }
+
+         
+
+        }
         this.loadingDeleteInstancia=false
         this.idInstanciaAEliminar=''
       }
@@ -83,7 +95,7 @@ export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
         console.log(response)
       },
       error=>{
-        console.log(error)
+       console.error(error)
       }
     )
     this.listSubcriptions.push(subcription2)
