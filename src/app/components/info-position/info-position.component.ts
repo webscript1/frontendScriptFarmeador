@@ -14,6 +14,7 @@ import { Global } from 'src/app/services/Global';
 export class InfoPositionComponent implements OnInit, AfterViewInit, OnDestroy{
   @Input() list_orders_gestionAtr: Array<detallesGestion>;
   
+  
 
   constructor(
   ){

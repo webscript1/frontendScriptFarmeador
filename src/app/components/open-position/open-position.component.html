@@ -3,6 +3,43 @@
 </h4>
 
 <div *ngIf="list_position_open.length>0" >
+  <div>
+    <button *ngIf="!show_detail"  (click)="showDetail()" class="btn btn-secondary">show details</button>
+    <button *ngIf="show_detail" (click)="showDetail()" class="btn btn-secondary">hide details</button>
+    <ng-container *ngIf="show_detail">
+      <div class="table-responsive">
+        <table class="table table-dark ">
+          <thead>
+            <tr>
+              <th>win:</th>
+              <td><span class="">{{info_account.win}}</span></td>
+              <th>initial capital:</th>
+              <td>{{info_account.capital}}$</td>
+  
+            </tr>
+            <tr>
+              <th>losess:</th>
+              <td><span class="">{{info_account.loss}}</span></td>
+              <th>current capital:</th>
+              <td>{{info_account.currentcapital}}$</td>
+            </tr>
+            <tr>
+              <th>total operations:</th>
+              <td>{{info_account.totalOperations}}</td>
+              <th>profit:</th>
+              <td>{{info_account.profit}}$ ({{info_account.profitPorcentaje}}%)</td>
+            </tr>
+            <tr>
+              <th>win %:</th>
+              <td>{{info_account.winPorcentaje.toFixed(2)}}%</td>
+              <th>drawdown: </th>
+              <td>{{info_account.drawdown}}</td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </ng-container>
+  </div>
   <div class="table-responsive">
      <table class="table table-dark table-striped">
           <thead class="">
@@ -21,36 +58,46 @@
                       <td>tp</td>
                       <td>sl</td>
                       <td>candles</td>
+                      <td>Status</td>
                       <td></td>
                 </tr>
           </thead>
           <tbody class="table-group-divider">
                 <ng-container *ngFor="let order of list_position_open; let i=index">
-                      <tr [ngClass]="{'table-success': order?.gestion?.side==='Buy',
-                      'table-danger':order?.gestion?.side ==='Sell'}" >
+                      <tr [ngClass]="{'table-success': order?.side==='Buy',
+                      'table-danger':order?.side ==='Sell'}" >
                             <td>{{i+1}}</td>
-                            <td>{{order?.gestion?.date}}</td>
-                            <td>{{order?.gestion?.symbol}}</td>
-                            <td>{{order?.gestion?.tick}}</td>
-                            <td>{{order?.gestion?.atr}}</td>
+                            <td>{{order?.date}}</td>
+                            <td>{{order?.symbol}}</td>
+                            <td>{{order?.tick}}</td>
+                            <td>{{order?.atr}}</td>
                             <td>
                                
                               
-                                 <div class="text-binance-last mb-1 d-block" [ngClass]="{'circleGreen': order.gestion.tendenciaDirection.trend==='long', 'circleRed': order.gestion.tendenciaDirection.trend==='short'}"></div>
+                                 <div class="text-binance-last mb-1 d-block" [ngClass]="{'circleGreen': order.tendenciaDirection.trend==='long', 'circleRed': order.tendenciaDirection.trend==='short'}"></div>
                                
-                                  <span *ngIf="order.gestion.tendenciaDirection.trend==='short'">Bajista</span>
-                                  <span *ngIf="order.gestion.tendenciaDirection.trend==='long'">Alcista</span>
-                                 <span class="d-block">priceLinea: {{order.gestion.tendenciaDirection.value}}$</span>
+                                  <span *ngIf="order.tendenciaDirection.trend==='short'">Bajista</span>
+                                  <span *ngIf="order.tendenciaDirection.trend==='long'">Alcista</span>
+                                 <span class="d-block">priceLinea: {{order.tendenciaDirection.value}}$</span>
                             </td>
-                            <td>{{order.gestion. entryPrice}}$</td>             
-                            <td>{{order.gestion.side}}</td>
-                            <td>{{order.gestion.qty}}</td>
-                            <td>{{order.gestion.tpPrecio}}$ <strong class="text-success">({{order.gestion.tpPorcentaje}}%)</strong></td>
-                            <td>{{order.gestion.stopLossPrice}}$ <strong class="text-danger">(-{{order.gestion. distanciaPorcentajeSl}}%)</strong></td>
-                            <td class="text-success">{{order.gestion.tp}}$</td>
-                            <td class="text-danger">{{order.gestion.sl}}$</td>
-                            <td >
-                              toyal candles: ({{order.candles.length}}) 
+                            <td>{{order. entryPrice}}$</td>             
+                            <td>{{order.side}}</td>
+                            <td>{{order.qty}} ({{(order.qty*order.entryPrice).toFixed(1)}}usdt)</td>
+                            <td>{{order.tpPrecio}}$ <strong class="text-success">({{order.tpPorcentaje}}%)</strong></td>
+                            <td>{{order.stopLossPrice}}$ <strong class="text-danger">(-{{order.distanciaPorcentajeSl}}%)</strong></td>
+                            <td class="text-success">{{order.tp}}$</td>
+                            <td class="text-danger">{{order.sl}}$</td>
+                            <td class="text-center">
+                              <button *ngIf="verCandle!==order.id" class="buttonNoStyles">
+                                <i (click)="seeCandle(order.id)" class="bi bi-eye"></i>
+                              </button>
+                              <button *ngIf="verCandle===order.id" class="buttonNoStyles">
+                                <i (click)="hideCandles()" class="bi bi-eye-slash"></i>
+                              </button>
+                              
+                              
+                             <div *ngIf="verCandle===order.id">
+                              toyal candles: ({{order.candles?.length}}) 
                               <div *ngFor="let candles of order.candles; let i=index" class="d-block">
                                 <li><strong> ({{i+1}}) date:{{convertirFechamilesegundosLocal(candles[0])}} </strong></li>
                                 <li >open:{{candles[1]}}</li>
@@ -58,12 +105,28 @@
                                 <li class="text-danger">low: {{candles[3]}}</li>
                                 <li class="">close: {{candles[4]}}</li>
                               </div>
+                             </div>
 
                             </td>
                             <td>
-                              <i (click)="conFirmarDeleteInstancia(order.gestion)"  data-bs-toggle="modal" data-bs-target="#deletePositionOdListLocal" class="bi bi-trash3"></i>
-                             
+                              <span *ngIf="editPosition!==order._id" >{{order.status}}</span>
+                              <select [(ngModel)]="statusEditString" *ngIf="editPosition===order._id"  class="form-select form-select-sm" aria-label="Small select example">
+                                <option disabled selected>Open this select menu</option>
+                                <option value="loss">loss</option>
+                                <option value="win">win</option>
+                                <option value="in process">in process</option>
+                              </select>
+                            </td>
+                            <td>
+                              <ng-container *ngIf="editPosition!==order._id" >
+                                <i (click)="conFirmarDeleteInstancia(order)"  data-bs-toggle="modal" data-bs-target="#deletePositionOdListLocal" class="bi bi-trash3"></i>
+                                <button (click)="edit_position(order._id)" class="buttonNoStyles"><i class="bi bi-pencil-square"></i></button>
                            
+                              </ng-container>
+                              <ng-container *ngIf="editPosition===order._id" >
+                                <button (click)="cancel_edit()" class="buttonNoStyles"><i class="bi bi-x"></i></button>
+                               <button (click)="conFirmarUpdatePosition(order)" data-bs-toggle="modal" data-bs-target="#updatePosition" class="buttonNoStyles"> <i class="bi bi-floppy"></i></button>
+                              </ng-container>
                             </td>
     
                       </tr>
@@ -89,9 +152,29 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
-            <button (click)="delete_position_of_list_local()" type="button" data-bs-dismiss="modal" class="btn btn-danger">eliminar</button>
+            <button (click)="delete_position_open()" type="button" data-bs-dismiss="modal" class="btn btn-danger">eliminar</button>
           </div>
         </div>
       </div>
     </div>
-    
+  
+ <!-- Modal -->
+ <div class="modal fade" id="updatePosition" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h1 class="modal-title fs-5 w-100 text-center" id="exampleModalLabel">¿Update position??</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <h6><strong>Symbol:</strong> {{datosPositionUpdate?.symbol}} </h6>
+       <h6><strong>side: </strong>{{datosPositionUpdate?.side}}</h6>
+       <h6><strong>Status: </strong>{{statusEditString}}</h6>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+        <button (click)="update_position(datosPositionUpdate!)" type="button" data-bs-dismiss="modal" class="btn btn-success">update</button>
+      </div>
+    </div>
+  </div>
+</div>

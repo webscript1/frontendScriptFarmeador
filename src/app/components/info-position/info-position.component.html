@@ -42,7 +42,7 @@
                               </td>
                               <td>{{order.entryPrice}}$</td>             
                               <td>{{order.side}}</td>
-                              <td>{{order.qty}}</td>
+                              <td>{{order.qty}} ({{(order.qty*order.entryPrice).toFixed(1)}}usdt)</td>
                               <td>{{order.tpPrecio}}$ <strong class="text-success">({{order.tpPorcentaje}}%)</strong></td>
                               <td>{{order.stopLossPrice}}$ <strong class="text-danger">(-{{order.distanciaPorcentajeSl}}%)</strong></td>
                               <td class="text-success">{{order.tp}}$</td>

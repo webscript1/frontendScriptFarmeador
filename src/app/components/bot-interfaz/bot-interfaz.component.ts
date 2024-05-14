@@ -1,14 +1,16 @@
 import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { detallesGestion, gestionAtr } from '../../interfaces/interfaces-gestion';
+import { Account_info, detallesGestion, gestionAtr, instanciasAuto } from '../../interfaces/interfaces-gestion';
 import { Subscription } from 'rxjs';
 import { SuperTrendService } from '../../services/superTrend/super-trend.service';
 
 import { ToastrService } from 'ngx-toastr';
 import { AudioService } from 'src/app/services/audio/audio.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { WsService } from 'src/app/services/ws/ws.service';
 import { Global } from 'src/app/services/Global';
 import { Router } from '@angular/router';
+import { SharedDataService } from 'src/app/services/shared_data/shared_data.service';
 
 @Component({
   selector: 'app-bot-interfaz',
@@ -19,7 +21,7 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
   
   public loadingActivatedBot:boolean
   public gestion_atr:gestionAtr
-  public detallesGestion:detallesGestion | undefined
+ 
   private subscriptions: Array<Subscription>=[];
   public selectedItem:string
   public message:string
@@ -27,7 +29,10 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
   public code:any
   public loading:boolean=true
   public list_orders_gestionAtr:Array<detallesGestion>
-  public list_position_open:Array<{gestion:detallesGestion,candles:Array<any>}>
+  public list_position_open:Array<detallesGestion>
+  public Activador:String='manual'
+  public idInstancia:any=Global.getIdInstancia() || ''
+  public list_instancias_auto:Array<instanciasAuto>=[]
 
   miFormulario!: FormGroup;
 
@@ -38,7 +43,12 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
     private toastr: ToastrService,
     private audioService: AudioService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private shared_data:SharedDataService,
+   
+   
+    
+    
 
   ){
     this.loadingActivatedBot=false
@@ -75,8 +85,14 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
     
   }
   ngOnInit(): void {
-    this.get_instancias_script()
-    this.get_list_positions_local()
+    
+    if(this.idInstancia){
+      this.getActivatedSymbolAuto(this.idInstancia)
+    }else(
+      this.get_instancias_script()
+    )
+    this.subInstanciasAuto()
+    
     this.conectionWs()
     this.miFormulario = this.fb.group({
       // Define los campos y las validaciones aquí
@@ -87,6 +103,15 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
       side: ['', [Validators.required]],
       // ... otros campos
     });
+    const sub3= this.shared_data.account_Info.subscribe(
+      response=>{
+       
+        this.update_info_formulario(response)
+      },error=>{
+        console.error(error)
+      }
+    )
+    this.subscriptions.push(sub3)
   }
   get symbolControl() { return this.miFormulario.get('symbol'); }
   get acountsizeControl() { return this.miFormulario.get('acountsize'); }
@@ -127,10 +152,9 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
             this.message=error.error.message
           }
           if(error.status===401){
-          
-           
-            Global.removeToken()
-            this.router.navigate(['/'])
+            if(error.status===401){
+              this.toastr.warning(error.error.message);
+            }  
           }
           this.code=500
           this.loadingActivatedBot=false
@@ -170,7 +194,7 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
   conectionWs(){
  
     
-    const subscription= this._wsService.onEvent('server:positionInfo').subscribe(
+    const subscription= this._wsService.onEvent('server:positionInfo'+this.idInstancia).subscribe(
       (data:any)=>{
         
         console.log('recibiendo data ws')
@@ -192,34 +216,25 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
       }
     )
     this.subscriptions.push(subscription)
-   
-    const subscription2= this._wsService.onEvent('server:positionOpen').subscribe(
+    const subscription2= this._wsService.onEvent('server:instanciasActive'+this.idInstancia).subscribe(
       (data:any)=>{
-        console.log('recibiendo data ws')
+        
+        console.log('recibiendo instancias ws ws',data)
         if(data){
-          let dataWs=JSON.parse(data)
-      
-          const info:detallesGestion=dataWs.gestion
-          let candles=dataWs.candles.reverse()
-             // Mostrar notificación
+          const info=data
        
           if(info){
-
-            info.date=this.convertirFechaUTCALocal(info.date)
+           this.list_instancias=info
+           this.toastr.success('update instancias');
+           this.audioService.playNotificationSound()
           }
-          const detalleGestion:detallesGestion=info
-          this.toastr.success(`${detalleGestion.symbol} ${detalleGestion.side}`,'Posicion abierta!',);
-          this.audioService.playNotificationSound();
-
-          if(detalleGestion){
-            this.list_position_open.unshift({gestion:detalleGestion,candles:candles})
-          }
-         
+        
         }
     
       }
     )
     this.subscriptions.push(subscription2)
+    
      
   }
 
@@ -247,26 +262,50 @@ export class BotInterfazComponent implements OnInit, AfterViewInit, AfterContent
       console.log(this.miFormulario.value)
     }
   }
-  get_list_positions_local(){
-    const subscription =this._superTrendService.get_list_positions_local().subscribe(
+  
+
+  update_info_formulario(info_account:Account_info){
+    this.acountsizeControl?.setValue(info_account.capital)
+    this.riskControl?.setValue(info_account.risk)
+    this.tpRelationControl?.setValue(info_account.tprelation)
+  }
+
+  modeActivadorAuto(){
+    this.Activador='auto'
+  }
+  modeActivadorManual(){
+    this.Activador='manual'
+  }
+  getActivatedSymbolAuto(id:string){
+   let sub= this._superTrendService.getActivatedSymbolAuto(id).subscribe(
       response=>{
-     
-         if(response.data.length>0){
-          
-          this.list_position_open=(response.data)
-          console.log('position open list local')
-          console.log(this.list_position_open)
-          this.list_position_open.forEach((item)=>{
-            item.gestion.date=this.convertirFechaUTCALocal(item.gestion.date)
-            item.candles.reverse()
-          })
-         }
-      },
-      error=>{
-        console.log(error)
+        this.list_instancias=response.data
+      },error=>{
+        console.error(error)
       }
     )
-    this.subscriptions.push(subscription)
+    this.subscriptions.push(sub)
+  }
+
+  subInstanciasAuto(){
+   let sub= this.shared_data.instanciasAuto.subscribe(
+      response=>{
+        
+         this.list_instancias_auto=response
+      },
+      err=>{
+        console.log(err)
+      }   
+    )
+    this.subscriptions.push(sub)
+  }
+
+  updateIdInstancia(event:any){
+    console.log('updateId')
+    console.log(event.target.value)
+    Global.setIdInstancia(event.target.value)
+    window.location.reload();
+    
   }
 
 

@@ -17,6 +17,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { SingInComponent } from './components/sing-in/sing-in.component';
 import { SingUpComponent } from './components/sing-up/sing-up.component';
+import { SettingComponent } from './components/setting/setting.component';
+import { InstanciasAutoComponent } from './components/instancias-auto/instancias-auto.component';
+import { CreateInstanciaComponent } from './components/create-instancia/create-instancia.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { SingUpComponent } from './components/sing-up/sing-up.component';
     MenuComponent,
     OpenPositionComponent,
     SingInComponent,
-    SingUpComponent
+    SingUpComponent,
+    SettingComponent,
+    InstanciasAutoComponent,
+    CreateInstanciaComponent
   ],
   imports: [
     FormsModule,

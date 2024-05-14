@@ -1,0 +1,190 @@
+<section>
+    <div *ngIf="!createInstance" class="">
+        <h4 *ngIf="list_instancias_auto.length>0" class="text-secondary text-center">List inatancias auto test</h4>
+       
+        <div class=" mb-2 d-flex justify-content-end position-relative">
+            <button (click)="bottonAddInstance(true)" class="btn btn-success float-end">New +</button>
+        </div>
+        <div class="table-responsive mt-3">
+            <h4 *ngIf="list_instancias_auto.length===0" class="text-secondary text-center"> no instances</h4>
+            <table *ngIf="list_instancias_auto.length>0" class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>N ({{list_instancias_auto.length}})</th>
+                        <th>name</th>
+                        <th>account</th>
+                        <th>service</th>
+                        <th>interval rsi</th>
+                        <th>positionN</th>
+                        <th>filter</th>
+                        <th>status</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container  *ngFor="let item of list_instancias_auto;let i=index ">
+                        <tr *ngIf="item._id!==idInstanciaEdit">
+                            <td>{{i}}</td>
+                            <td>{{item.name}}</td>
+                            <td>
+                                <ul>
+                                    <li>capital:{{item.account.capital}}$</li>
+                                    <li> risk:{{item.account.risk}}%</li>
+                                    <li>  tpRelation:{{item.account.tp_relation}}%</li>
+                                    <li> fee:{{item.account.fee}}%   </li>
+                                </ul>
+                                
+                               
+                              
+                                
+                            </td>
+                            <td>{{item.service}}</td>
+                            <td>{{item.intervalRsi}}</td>
+                            <td>{{item.positionNumer}}</td>
+                            <td>
+                                <ul>
+                                    <li><strong>volumen:</strong>{{item.filter.volumen}}</li>
+                                    <li><strong>rsiUp:</strong> {{item.filter.rsiUp}}</li>
+                                    <li><strong>rsiDown:</strong>{{item.filter.rsiDown}}</li>
+                                    <li><strong>rsiBtcUp:</strong>{{item.filter.rsiBtcUp}}</li>
+                                    <li> <strong>rsiBtcDown:</strong>{{item.filter.rsiDown}}</li>
+                                    <li> <strong>priceSymbol:</strong>{{item.filter.priceSymbol}}</li>
+                                </ul>
+                               
+                                
+                                
+                               
+                               
+                            </td>
+                            <td>
+                                <ng-container *ngIf="item.status">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    <span class="ms-2">  activated</span>
+                                </ng-container>
+                                <ng-container *ngIf="!item.status">
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                    <span class="ms-2">disabled</span>
+                                </ng-container>
+                            </td>
+                            <td>
+                               <ng-container *ngIf="idInstanciaDelete!==item._id">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                      
+                                      <i class="bi bi-gear"></i>
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                      <li><a (click)="deleteInstancia(item)" class="dropdown-item " >delete</a></li>
+                                      <li><a (click)="editOnstancia(item)" class="dropdown-item " >update</a></li>
+                                    </ul>
+                                  </div>
+                               </ng-container>
+                               <ng-container *ngIf="loadig && idInstanciaDelete===item._id">
+                                <div class="spinner-border spinner-border-sm" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                  </div>
+                                  
+                               </ng-container>
+                            </td>
+                        </tr>
+                       
+                        <tr *ngIf="item._id===idInstanciaEdit">
+                          
+                            <td>{{i}}</td>
+                            <td><input  class="input-basic_instancia_text" type="text" name="nameUpdate" [(ngModel)]="InstanciaUpdate.name"></td>
+                            <td>
+                                <ul>
+                                    <li class="d-flex justify-content-between">
+                                        <label class="me-2" for="capital:">capital</label>
+                                        <input size="4" class="input-basic_instancia" type="number" [(ngModel)]="InstanciaUpdate.account.capital" name="capitalUpdate">
+                                    </li>
+                                    <li class="d-flex justify-content-between"> 
+                                        <label class="me-2"  for="risk">risk:</label>
+                                        <input size="4" class="input-basic_instancia" name="riskUpdate" [(ngModel)]="InstanciaUpdate.account.risk" type="number">
+                                     
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <label class="me-2 "  for="tpRelation">tpRelation:</label>
+                                        <input size="4" class="input-basic_instancia" name="tpRelationUpdate" [(ngModel)]="InstanciaUpdate.account.tp_relation" type="number">
+                                    </li>
+                                    <li class="d-flex justify-content-between">
+                                        <label class="me-2"  for="fee">fee:</label>
+                                        <input size="4"name="feeUpdate" [(ngModel)]="InstanciaUpdate.account.fee" class="input-basic_instancia"  type="number">
+                                    </li>
+                                </ul>
+                                
+                               
+                              
+                                
+                            </td>
+                            <td>
+                                <select name="service" [(ngModel)]="InstanciaUpdate.service" class="form-select form-select-sm bg-secondary text-white" aria-label="Small select example">
+                                    
+                                    <option [selected]="InstanciaUpdate.service==='rsi'" value="rsi">rsi</option>
+                                    <option [selected]="InstanciaUpdate.service==='last 30m'"  value="last 30m">last 30m</option>
+                                   
+                                  </select>
+                            </td>
+                            <td>
+                                <select name="intervalRsiUpdate" [(ngModel)]="InstanciaUpdate.intervalRsi" style="width: 80px;" class="form-select form-select-sm bg-secondary text-white" aria-label="Small select example">
+                                    <option [selected]="InstanciaUpdate.intervalRsi==='5m'"  value="5m">5m</option>
+                                   
+                                    <option [selected]="InstanciaUpdate.intervalRsi==='3m'" value="3m">3m</option>
+                                   
+                                  </select>
+                            </td>
+                            <td><input name="positionNUpdate" [(ngModel)]="InstanciaUpdate.positionNumer" class="input-basic_instancia" size="4" type="number" value=2></td>
+                            <td>
+                                <ul>
+                                    <li><strong>volumen:</strong><input size="4" name="volumenUpdate" [(ngModel)]="InstanciaUpdate.filter.volumen" class="input-basic_instancia"  type="number"></li>
+                                    <li><strong>rsiUp:</strong> <input size="4" name="rsiupUpdate"    [(ngModel)]="InstanciaUpdate.filter.rsiUp" class="input-basic_instancia"  type="number"></li>
+                                    <li><strong>rsiDown:</strong><input size="4" name="rsidown" class="input-basic_instancia" [(ngModel)]="InstanciaUpdate.filter.rsiDown" type="number"></li>
+                                    <li><strong>rsiBtcUp:</strong><input size="4" name="btcup" class="input-basic_instancia" [(ngModel)]="InstanciaUpdate.filter.rsiBtcUp" type="number"></li>
+                                    <li> <strong>rsiBtcDown:</strong><input size="4" name="btcdown" class="input-basic_instancia" [value]="InstanciaUpdate.filter.rsiBtcDown" type="number"></li>
+                                    <li> <strong>priceSymbol:</strong><input size="4" name="pricesymbol" class="input-basic_instancia" [(ngModel)]="InstanciaUpdate.filter.priceSymbol" type="number"></li>
+                                </ul>
+                               
+                                
+                                
+                               
+                               
+                            </td>
+                            <td>
+                                <select [(ngModel)]="InstanciaUpdate.status" style="width: 80px;" class="form-select form-select-sm bg-secondary text-white" aria-label="Small select example">
+                                    
+                                    <option value="true">true</option>
+                                    <option value="false">false</option>
+                                   
+                                  </select>
+                              </td>
+                            <td>
+                                <ng-container *ngIf="!loadig">
+                                    <button (click)="cancelEditInstancia()" class=" btn btn-danger me-1"><i class="bi bi-x-lg"></i></button>
+                               
+                                
+                                <button (click)="saveUpdate(InstanciaUpdate)" class=" btn btn-success"><i class="bi bi-floppy "></i></button>
+
+                                </ng-container>
+                                <ng-container *ngIf="loadig">
+                                    <div class="spinner-border spinner-border-sm" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                      </div>
+                                      
+                                </ng-container>
+                                
+                               
+                                
+                                </td>
+                          
+                        </tr>
+                   
+                    </ng-container>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="createInstance">
+        <app-create-instancia (sendInstanciaCreate)="addInstanciaArray($event)" (dataChange)="bottonAddInstance($event)"></app-create-instancia>
+    </div>
+</section>

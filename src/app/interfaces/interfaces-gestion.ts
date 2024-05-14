@@ -12,7 +12,8 @@ export interface gestionAtr{
 }
 
 export interface detallesGestion{
-    id?:string,
+    _id?:string,
+    id?:string
     symbol:string,
     side:string,
     atr:number,
@@ -29,7 +30,10 @@ export interface detallesGestion{
     minOrderQty:any,
     date:any,
     tick:any,
-    tendenciaDirection:{trend:string,value:number}
+    tendenciaDirection:{trend:string,value:number},
+    process?:string,
+    status?:string,
+    candles?:Array<any>
 }
 
 export interface activatedSymbol{
@@ -45,4 +49,33 @@ export interface user{
     password:string,
     passwordRoot:string,
     role:string
+}
+
+export interface Account_info{
+    _id?:any
+    capital:number,
+    risk: number,
+    tprelation: number,
+    positions:Array<{id:any,status:String,sl:Number,tp:Number,}>,
+    mg: number,
+    loss: number,
+    win: number,
+    winPorcentaje: number,
+    drawdown: number,
+    currentcapital: number,
+    maximoCapital: number,
+    totalOperations:number,
+    profit:number,
+    profitPorcentaje:number,
+}
+export interface instanciasAuto{
+    _id?:string
+    name:string,
+    account:{risk:number,capital:number,tp_relation:number,fee:number},
+    service:string,
+    intervalRsi:string,
+    positionNumer:number,
+    status:boolean,
+    filter:{volumen:number,rsiUp:number,rsiDown:number,rsiBtcUp:number,rsiBtcDown:number,
+           priceSymbol:number}
 }

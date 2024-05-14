@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Global } from '../Global';
 import { Observable } from 'rxjs';
-import { gestionAtr } from '../../interfaces/interfaces-gestion';
+import { gestionAtr, instanciasAuto } from '../../interfaces/interfaces-gestion';
 
 
 @Injectable({
@@ -45,30 +45,124 @@ get_instancias_script(): Observable<any>{
   return this.http.get(this.url+this.version+'/bot/get-instancias-script', {headers:headers});
 }
 deleteInstancia(id:any): Observable<any>{
+  let idInstancia=Global.getIdInstancia()
   this.token=Global.token()
 
   let headers= new HttpHeaders().set('Content-Type','application/json');
   headers= headers.append('Authorization', "Bearer "+ this.token);
 
-  return this.http.delete(this.url+this.version+'/bot/detele-instancia-ws/'+id, {headers:headers});
+  if(idInstancia==='manual'){
+    return this.http.delete(this.url+this.version+'/bot/detele-instancia-ws/'+id, {headers:headers});
+  }else{
+    return this.http.delete(this.url+this.version+'/bot/detele-instancia-ws/'+id+`/?idInstancia=${idInstancia}`, {headers:headers});
+  }
+
+
 }
 
-get_list_positions_local(): Observable<any>{
+get_list_positions(idInstancia:string): Observable<any>{
   this.token=Global.token()
 
   let headers= new HttpHeaders().set('Content-Type','application/json');
   headers= headers.append('Authorization', "Bearer "+ this.token);
 
-  return this.http.get(this.url+this.version+'/bot/get-list-position-open', {headers:headers});
+  if(idInstancia==='manual'){
+    return this.http.get(this.url+this.version+`/position/get-all/?mode=${idInstancia}`, {headers:headers});
+  }else{
+    return this.http.get(this.url+this.version+`/position/get-all/?idInstancia=${idInstancia}`, {headers:headers});
+  }
+
+ 
 }
-delete_position_list_local(id:string): Observable<any>{
+delete_position(id:string): Observable<any>{
   this.token=Global.token()
 
   let headers= new HttpHeaders().set('Content-Type','application/json');
   headers= headers.append('Authorization', "Bearer "+ this.token);
 
-  return this.http.delete(this.url+this.version+'/bot/delete-position-of-list-local/'+id, {headers:headers});
+  return this.http.delete(this.url+this.version+'/position/delete/'+id, {headers:headers});
 }
+
+update_position(data:any): Observable<any>{
+  this.token=Global.token()
+  const params=JSON.stringify(data)
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.put(this.url+this.version+'/position/update',params, {headers:headers});
+}
+create_and_update_setting_account(data:any): Observable<any>{
+  this.token=Global.token()
+  const params=JSON.stringify(data)
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.post(this.url+this.version+'/account/create',params, {headers:headers});
+}
+get_info_account(): Observable<any>{
+  this.token=Global.token()
+
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.get(this.url+this.version+'/account/get', {headers:headers});
+}
+getInstanciasAuto():Observable<any>{
+  this.token=Global.token()
+
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.get(this.url+this.version+'/instancia/get-all', {headers:headers});
+
+}
+
+getActivatedSymbolAuto(id:string):Observable<any>{
+  this.token=Global.token()
+
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.get(this.url+this.version+'/bot/get-instancias-script-auto/'+id, {headers:headers});
+
+}
+updateInstanciasAuto(instancia:instanciasAuto):Observable<any>{
+  this.token=Global.token()
+  let params=JSON.stringify(instancia)
+
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.put(this.url+this.version+'/instancia/update',params, {headers:headers});
+
+}
+createInstanciasAuto(instancia:instanciasAuto):Observable<any>{
+  this.token=Global.token()
+  let params=JSON.stringify(instancia)
+
+
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.post(this.url+this.version+'/instancia/create',params, {headers:headers});
+
+}
+deleteInstanciasAuto(id:string):Observable<any>{
+  this.token=Global.token()
+ 
+  let headers= new HttpHeaders().set('Content-Type','application/json');
+  headers= headers.append('Authorization', "Bearer "+ this.token);
+
+  return this.http.delete(this.url+this.version+'/instancia/delete/'+id, {headers:headers});
+
+}
+
 
 
   

@@ -1,5 +1,5 @@
 export const Global={
-//url:'https://elscriptfarmeador.onrender.com/',
+ //url:'https://scripfarmeador.onrender.com/',
  url:`http://localHost:3001/`,
   url_version:'v1',
   token: (): string | null=> {
@@ -10,5 +10,12 @@ export const Global={
       },
   removeToken:()=>{
     localStorage.removeItem('token')
+  },
+
+  setIdInstancia:(id:string)=>{
+    localStorage.setItem('idinstancia',id)
+  },
+  getIdInstancia:()=>{
+   return localStorage.getItem('idinstancia')
   }
 }

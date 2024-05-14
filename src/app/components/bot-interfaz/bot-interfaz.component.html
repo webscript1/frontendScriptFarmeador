@@ -10,10 +10,12 @@
                 <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='activador' }" (click)="navegation('activador')">activator</li>
                 <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='instancias' }" (click)="navegation('instancias')">activatedSymbols({{list_instancias.length}})</li>
                 <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='info' }" (click)="navegation('info')">infoPositions({{list_orders_gestionAtr.length}})</li>
-                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='openPosition' }" (click)="navegation('openPosition')">openPosition({{list_position_open.length}})</li>    
+                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='openPosition' }" (click)="navegation('openPosition')">openPosition</li>    
+                <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='setting' }" (click)="navegation('setting')">setting</li>    
             </ul>
         </div>
-       <ng-container>
+     
+       <ng-container *ngIf="false">
         <form class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4" [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
             <div [hidden]="selectedItem!=='activador'" class="table-responsive  mt-1 p-3">
                 <div class="input-group mb-3 bg-secondary">
@@ -80,7 +82,117 @@
             </div>
         </form>
        </ng-container>
-      
+       
+       <ng-container>
+        <div [hidden]="selectedItem!=='activador'"  class="row justify-content-center">
+            <ng-container>
+                <div class="row justify-content-center">
+                    <div class="mb-2 col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 ">
+                        <select (change)="updateIdInstancia($event)" class=" form-select bg-dark text-white" aria-label="Default select example">
+                            
+                            <option value="manual">manual</option>
+                            <ng-container *ngFor="let instancia of list_instancias_auto">
+                                <option [selected]="instancia._id===idInstancia"  value="{{instancia._id}}"><li><a class="border" href="/">{{instancia.name}}</a></li></option>
+                            </ng-container>
+    
+                           
+                          </select>
+                    </div>
+                </div>
+            </ng-container>
+            <div class="text-center">
+            <button (click)="modeActivadorManual()" class="btn bg-secondary text-white me-2">Manual</button>
+            <button (click)="modeActivadorAuto()" class="btn bg-secondary text-white">Automatico</button>
+          </div>
+            <form *ngIf="Activador==='manual'" [hidden]="selectedItem!=='activador'"  class="p-1 p-sm-3 pt-3 mt-3  col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 form-activador" [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
+                <div>
+                    <h4 class="text-white text-center">Activator Manual</h4>
+                </div>
+                <div class="input-group mb-3 mt-3 bg-secondary">
+                    <select class="form-control selected-side text-white p-3" (change)="selectSide($event)" formControlName="side">
+                        <option selected disabled value="">select an option</option>
+                        <option value="Buy">Long</option>
+                        <option value="Sell">Short</option>
+                    </select>
+                </div>
+                <div class="mb-2 py-1 mt-2" style="position: relative;">
+                    
+                  
+                    <input  name="symbol" placeholder="" type="text" class="input-basic floating-input " formControlName="symbol">
+                    
+                    
+                    <label class="ms-3 floating-text-label text-white" for="symbol">symbol</label>
+                    
+                    
+                     
+                 </div>
+                 <div class="mb-2 py-1 mt-2" style="position: relative;">
+                    
+                  
+                    <input   placeholder="" class="input-basic floating-input " type="number" name="acountsize" formControlName="acountsize">
+                    
+                    
+                    <label class="ms-3 floating-text-label text-white" for="acountsize">acountsize</label>
+                    
+                    
+                     
+                 </div>
+                 <div class="mb-2 py-1 mt-2" style="position: relative;">
+                    
+                  
+                    <input   placeholder="" class="input-basic floating-input " type="number" name="risk" formControlName="risk">
+                    
+                    
+                    <label class="ms-3 floating-text-label text-white" for="risk">risk</label>
+                    
+                    
+                     
+                 </div>
+                 <div class="mb-2 py-1 mt-2" style="position: relative;">
+                    
+                  
+                    <input  name="tp-relation" placeholder=""  class="input-basic floating-input " type="number" formControlName="tpRelation">
+                    
+                    
+                    <label class="ms-3 floating-text-label text-white" for="tp-relation">tp-relation</label>
+                    
+                    
+                     
+                 </div>
+                 <ng-container *ngIf="message">
+                    <div [ngClass]="{'alert-success': code === 200, 'alert-danger': code !== 200}" class="alert  alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                </ng-container>
+                <div class="mt-4">
+                    <div *ngIf="!loadingActivatedBot">
+                        <button [disabled]="miFormulario.invalid"  type="submit" [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                                            'btn-danger':gestion_atr.side==='Sell',
+                                            'btn-secondary': gestion_atr.side !== 'Buy' && gestion_atr.side !== 'Sell'}"  type="submit" class="btn btn-success col-12">
+                        Activate
+                        </button>
+                      
+                      </div>
+                      <div *ngIf="loadingActivatedBot">
+                        <button  [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                        'btn-danger':gestion_atr.side==='Sell'}" class="btn  col-12" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span class="visually-hidden" role="status">Loading...</span>
+                          </button>
+                          
+                      </div>
+                </div>
+            </form>
+    
+            <app-instancias-auto [hidden]="Activador!=='auto'"></app-instancias-auto>
+
+        </div>
+       
+        
+
+       </ng-container>
+
          <ng-container>
         <div [hidden]="selectedItem!=='instancias'">
             <app-activated-symbols [instancias]="list_instancias"></app-activated-symbols>
@@ -101,6 +213,12 @@
             <app-open-position [list_position_open]="list_position_open" ></app-open-position>
         </div>
       </ng-container>
+      <ng-container>
+        <div [hidden]="selectedItem!=='setting'">
+             <app-setting></app-setting>
+        </div>
+      </ng-container>
+     
     </section>
 </ng-container>
 

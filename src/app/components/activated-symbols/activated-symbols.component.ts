@@ -4,6 +4,7 @@ import { activatedSymbol, gestionAtr } from '../../interfaces/interfaces-gestion
 import { SuperTrendService } from '../../services/superTrend/super-trend.service';
 import { Subscription } from 'rxjs';
 import { Global } from 'src/app/services/Global';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-activated-symbols',
@@ -22,6 +23,7 @@ export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
 
   constructor(
     private _botService:SuperTrendService,
+    private toastr: ToastrService,
   
   ){
    this.activatedSymbol=[]
@@ -62,6 +64,7 @@ export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
         }
         this.loadingDeleteInstancia=false
         this.idInstanciaAEliminar=''
+      
       },
       error=>{
         console.log(error)
@@ -75,6 +78,9 @@ export class ActivatedSymbolsComponent implements OnInit, OnDestroy {
          
 
         }
+        if(error.status===401){
+          this.toastr.warning(error.error.message);
+        }  
         this.loadingDeleteInstancia=false
         this.idInstanciaAEliminar=''
       }
