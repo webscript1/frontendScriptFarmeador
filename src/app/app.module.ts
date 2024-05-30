@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; 
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgClass } from '@angular/common'; // Importar NgClass
 
 
@@ -26,37 +26,29 @@ import { CreateInstanciaComponent } from './components/create-instancia/create-i
 import { RsiDetailComponent } from './components/rsi-detail/rsi-detail.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    ActivatedSymbolsComponent,
-    BotInterfazComponent,
-    CalculadoraGestionComponent,
-    InfoPositionComponent,
-    MenuComponent,
-    OpenPositionComponent,
-    SingInComponent,
-    SingUpComponent,
-    SettingComponent,
-    InstanciasAutoComponent,
-    CreateInstanciaComponent,
-    RsiDetailComponent
-  ],
-  imports: [
-    FormsModule,
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    ToastrModule.forRoot(),
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    NgClass,
-    NgxPaginationModule
-    
-  ],
-  providers: [
-    
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        ActivatedSymbolsComponent,
+        BotInterfazComponent,
+        CalculadoraGestionComponent,
+        InfoPositionComponent,
+        MenuComponent,
+        OpenPositionComponent,
+        SingInComponent,
+        SingUpComponent,
+        SettingComponent,
+        InstanciasAutoComponent,
+        CreateInstanciaComponent,
+        RsiDetailComponent
+    ],
+    bootstrap: [AppComponent], imports: [FormsModule,
+        BrowserModule,
+        AppRoutingModule,
+        ToastrModule.forRoot(),
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        NgClass,
+        NgxPaginationModule], providers: [
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }

@@ -3,7 +3,7 @@ import { detallesGestion, gestionAtr } from '../../interfaces/interfaces-gestion
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SuperTrendService } from '../../services/superTrend/super-trend.service';
-import { HttpClientModule } from '@angular/common/http'
+import {} from '@angular/common/http'
 import {provideHttpClient} from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 
