@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <div class="row justify-content-center pb-5">
+        <form  #formCreateArticle="ngForm" (ngSubmit)="create_and_update_setting()"   class="formulario-login col-12 col-sm-7 col-md-6 col-lg-4" >
+            <div>
+               <h6 class="text-white text-center">setting account</h6>
+            </div>
+            <div class="mb-4 py-1 mt-5" style="position: relative;">
+               
+               <input  placeholder="" name="capital" [(ngModel)]="account_info.capital" class="input-basic floating-input " type="text"
+              
+               >
+               <label     class=" ms-3 floating-text-label text-white" for="capital">capital</label>
+               
+               
+                
+            </div>
+           
+           
+            <div class="mb-4 py-1" style="position: relative;">
+              
+               <input  placeholder="" name="risk" [(ngModel)]="account_info.risk"   class="input-basic floating-input" type="text"
+               
+               >
+               <label  class="ms-3 floating-text-label text-white" for="risk">Risk</label>
+             
+               
+               
+       
+            </div>
+
+            <div class="mb-4 py-1" style="position: relative;">
+              
+                <input  placeholder="" name="tp-relation" [(ngModel)]="account_info.tprelation"   class="input-basic floating-input" type="text"
+                
+                >
+                <label  class="ms-3 floating-text-label text-white" for="tp-relation">Tp relation</label>
+              
+                
+                
+        
+             </div>
+            
+             
+            <div >
+           
+               
+                
+            </div>
+            <div>
+                <button type="submit" class="btn  btn-success w-100">Update</button>
+            </div>
+         
+         
+          </form>
+    </div>
+</div>

@@ -1,0 +1,203 @@
+
+
+@defer {
+  @if (!loading) {
+    <section class="mx-3 px-2 row justify-content-center">
+      <h3 class="text-secondary text-center mt-1">
+        script en desarrollo :)
+      </h3>
+      <div>
+        <ul class="d-flex justify-content-center flex-wrap">
+          <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='activador' }" (click)="navegation('activador')">activator</li>
+          <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='instancias' }" (click)="navegation('instancias')">activatedSymbols({{list_instancias.length}})</li>
+          <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='info' }" (click)="navegation('info')">infoPositions({{list_orders_gestionAtr.length}})</li>
+          <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='openPosition' }" (click)="navegation('openPosition')">openPosition</li>
+          <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='rsi' }" (click)="navegation('rsi')">rsi</li>
+          <li class="text-info" [ngClass]="{ 'linkactive': selectedItem==='setting' }" (click)="navegation('setting')">setting</li>
+        </ul>
+      </div>
+      @if (false) {
+        <form class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4" [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
+          <div [hidden]="selectedItem!=='activador'" class="table-responsive  mt-1 p-3">
+            <div class="input-group mb-3 bg-secondary">
+              <select class="form-control " (change)="selectSide($event)" formControlName="side">
+                <option selected disabled value="">Seleccione una opción</option>
+                <option value="Buy">Long</option>
+                <option value="Sell">Short</option>
+              </select>
+            </div>
+            <table class="table table-dark ">
+              <thead >
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody style="background-color: red;">
+                <tr>
+                  <td>symbol</td>
+                  <td><input  name="symbol" type="text" class="form-control" formControlName="symbol"></td>
+                </tr>
+                <tr>
+                  <td class="ms-2">Account size</td>
+                  <td><input  class="form-control" type="number" name="acountsize" formControlName="acountsize"></td>
+                  <td><span class="ps-2">$</span></td>
+                </tr>
+                <tr>
+                  <td>Risk</td>
+                  <td><input  class="form-control" type="number" name="risk" formControlName="risk"></td>
+                  <td><span class="ps-2">%</span></td>
+                </tr>
+                <tr>
+                  <td>tp/relation</td>
+                  <td><input   name="tpRelation" class="form-control" type="number" formControlName="tpRelation"></td>
+                </tr>
+              </tbody>
+            </table>
+            @if (message) {
+              <div [ngClass]="{'alert-success': code === 200, 'alert-danger': code !== 200}" class="alert  alert-dismissible fade show" role="alert">
+                {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            }
+            @if (!loadingActivatedBot) {
+              <div>
+                      <button [disabled]="miFormulario.invalid"  type="submit" [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                                          'btn-danger':gestion_atr.side==='Sell',
+                                          'btn-secondary': gestion_atr.side !== 'Buy' && gestion_atr.side !== 'Sell'}"  type="submit" class="btn btn-success col-12">
+                  Activar script
+                </button>
+              </div>
+            }
+            @if (loadingActivatedBot) {
+              <div>
+                      <button  [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                      'btn-danger':gestion_atr.side==='Sell'}" class="btn  col-12" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  <span class="visually-hidden" role="status">Loading...</span>
+                </button>
+              </div>
+            }
+          </div>
+        </form>
+      }
+      <ng-container>
+        <div [hidden]="selectedItem!=='activador'"  class="row justify-content-center">
+          <ng-container>
+            <div class="row justify-content-center">
+              <div class="mb-2 col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 ">
+                <select (change)="updateIdInstancia($event)" class=" form-select bg-dark text-white" aria-label="Default select example">
+                  <option value="manual">manual</option>
+                  @for (instancia of list_instancias_auto; track instancia) {
+                    <option [selected]="instancia._id===idInstancia"  value="{{instancia._id}}"><li><a class="border" href="/">{{instancia.name}}</a></li></option>
+                  }
+                </select>
+              </div>
+            </div>
+          </ng-container>
+          <div class="text-center">
+            <button (click)="modeActivadorManual()" class="btn bg-secondary text-white me-2">Manual</button>
+            <button (click)="modeActivadorAuto()" class="btn bg-secondary text-white">Automatico</button>
+          </div>
+          @if (Activador==='manual') {
+            <form [hidden]="selectedItem!=='activador'"  class="p-1 p-sm-3 pt-3 mt-3  col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 form-activador" [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
+              <div>
+                <h4 class="text-white text-center">Activator Manual</h4>
+              </div>
+              <div class="input-group mb-3 mt-3 bg-secondary">
+                <select class="form-control selected-side text-white p-3" (change)="selectSide($event)" formControlName="side">
+                  <option selected disabled value="">select an option</option>
+                  <option value="Buy">Long</option>
+                  <option value="Sell">Short</option>
+                </select>
+              </div>
+              <div class="mb-2 py-1 mt-2" style="position: relative;">
+                <input  name="symbol" placeholder="" type="text" class="input-basic floating-input " formControlName="symbol">
+                <label class="ms-3 floating-text-label text-white" for="symbol">symbol</label>
+              </div>
+              <div class="mb-2 py-1 mt-2" style="position: relative;">
+                <input   placeholder="" class="input-basic floating-input " type="number" name="acountsize" formControlName="acountsize">
+                <label class="ms-3 floating-text-label text-white" for="acountsize">acountsize</label>
+              </div>
+              <div class="mb-2 py-1 mt-2" style="position: relative;">
+                <input   placeholder="" class="input-basic floating-input " type="number" name="risk" formControlName="risk">
+                <label class="ms-3 floating-text-label text-white" for="risk">risk</label>
+              </div>
+              <div class="mb-2 py-1 mt-2" style="position: relative;">
+                <input  name="tp-relation" placeholder=""  class="input-basic floating-input " type="number" formControlName="tpRelation">
+                <label class="ms-3 floating-text-label text-white" for="tp-relation">tp-relation</label>
+              </div>
+              @if (message) {
+                <div [ngClass]="{'alert-success': code === 200, 'alert-danger': code !== 200}" class="alert  alert-dismissible fade show" role="alert">
+                  {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              }
+              <div class="mt-4">
+                @if (!loadingActivatedBot) {
+                  <div>
+                          <button [disabled]="miFormulario.invalid"  type="submit" [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                                              'btn-danger':gestion_atr.side==='Sell',
+                                              'btn-secondary': gestion_atr.side !== 'Buy' && gestion_atr.side !== 'Sell'}"  type="submit" class="btn btn-success col-12">
+                      Activate
+                    </button>
+                  </div>
+                }
+                @if (loadingActivatedBot) {
+                  <div>
+                          <button  [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                          'btn-danger':gestion_atr.side==='Sell'}" class="btn  col-12" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      <span class="visually-hidden" role="status">Loading...</span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </form>
+          }
+          <app-instancias-auto [hidden]="Activador!=='auto'"></app-instancias-auto>
+        </div>
+      </ng-container>
+      <ng-container>
+        <div [hidden]="selectedItem!=='instancias'">
+          <app-activated-symbols [instancias]="list_instancias"></app-activated-symbols>
+        </div>
+      </ng-container>
+      <ng-container>
+        <div [hidden]="selectedItem!=='info'">
+          <app-info-position [list_orders_gestionAtr]="list_orders_gestionAtr"></app-info-position>
+        </div>
+      </ng-container>
+      <ng-container>
+        <div [hidden]="selectedItem!=='openPosition'">
+          <app-open-position [list_position_open]="list_position_open" ></app-open-position>
+        </div>
+      </ng-container>
+      <ng-container  >
+        <div [hidden]="selectedItem!=='rsi'">
+          <app-rsi-detail></app-rsi-detail>
+        </div>
+        
+      </ng-container>
+      <ng-container>
+        <div [hidden]="selectedItem!=='setting'">
+          <app-setting></app-setting>
+        </div>
+      </ng-container>
+    </section>
+  }
+
+}@loading (minimum 1s) {
+ 
+    
+  <div style="height: 75vh;" class=" d-flex justify-content-center align-items-center border border-0">
+   
+    <div class="spinner-border text-secondary" style="width: 3rem; height: 3rem;" role="status">
+      <strong><span class="visually-hidden">Loading...</span></strong>
+    </div>
+    
+  </div>
+}
+
+

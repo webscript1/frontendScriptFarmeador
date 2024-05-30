@@ -1,0 +1,44 @@
+<section class="mx-2">
+    <nav class="navbar navbar-expand-lg  bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ScriptFarmeador </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+           <!--
+                <li class="nav-item">
+                  <a class="nav-link"   [routerLink]="'/'">calculadora</a>
+                </li>
+                -->
+          
+                <li class="nav-item">
+                  <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link">log out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        
+      </nav>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 w-100 text-center" id="exampleModalLabel">¿cerrar session?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <h6> </h6>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
+        <button (click)="logOut()" type="button" data-bs-dismiss="modal" class="btn btn-danger">si, cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

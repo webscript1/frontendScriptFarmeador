@@ -1,0 +1,88 @@
+<div class="">
+    <div class="table-responsive">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>N ({{list_rsi.length}})</th>
+                    
+                     <th>data</th>
+                     <th>id p</th>
+                    <th>id instancia</th>
+                    <th>symbol</th>
+                    <th>rsi</th>
+                    <th>btc rsi</th>
+                    <th>volume</th>
+                    <th>fueraBB</th>
+                    <th>status</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of list_rsi; track $index) {
+                    <tr>
+                        <td>{{$index}}</td>
+                        <td>{{item.createdAt}}</td>
+                        <td>{{item.idPosition}}</td>
+                        <td>{{item.idInstancia}}</td>
+                        <td>
+                          <div class="text-binance-last mb-1 d-block" [ngClass]="{'circleGreen': item.rsi<=30 , 'circleRed': item.rsi>=70}"></div>
+                          {{item.symbol}}</td>
+                        <td>{{item.rsi}}</td>
+                        <td>{{item.rsiBtc}}</td>
+                        <td>{{item.volumen}}</td>
+                        <td>{{item.precioFueraBB}}</td>
+                        <td>
+                          @if (item.status==='win') {
+                            <i class="bi bi-check-circle-fill  text-success"></i>
+                          }@else if (item.status==='loss') {
+                            <i class="bi bi-x-circle-fill text-danger"></i>
+                          }
+                          {{item.status}}</td>
+                        <th> 
+                          @if(idDelete!==item._id){
+                            <button data-bs-toggle="modal" data-bs-target="#deleteRsi"  (click)="confirDeleteRsi(item)" class=" buttonNoStyles"><i class="bi bi-trash3-fill text-danger"></i></button>
+                          }@else if(loading && idDelete===item._id){
+                            <div class="spinner-border spinner-border-sm" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                            
+                          }
+                            
+                        </th>
+                    
+
+                    </tr>
+
+                  
+
+                }
+               
+            </tbody>
+
+        </table>
+
+    </div>
+    
+      
+</div>
+
+<div class="modal fade" id="deleteRsi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header ">
+          <h1 class="modal-title fs-5 w-100 text-center" id="exampleModalLabel">¿Eliminar rsi?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6><strong>Symbol: {{rsiDelete.symbol}}</strong>  </h6>
+          <h6><strong>id: {{rsiDelete._id}} </strong></h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
+          <button (click)="deleteRsi(rsiDelete._id)" type="button" data-bs-dismiss="modal" class="btn btn-danger">eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+

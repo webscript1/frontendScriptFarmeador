@@ -1,1 +1,90 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+
+body{
+    background-color: #212529;
+   
+}
+
+.circleGreen {
+    float: left;
+    margin-top: 5px;
+    margin-right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: #00FF00;; /* Cambiar el color aquí */
+    border-radius: 50%;
+  }
+  .circle {
+    float: left;
+    margin-top: 5px;
+    margin-right: 4px;
+    width: 15px;
+    height: 15px;
+    background-color: #00FF00;; /* Cambiar el color aquí */
+    border-radius: 50%;
+  }
+  .long{
+    background-color: green;
+  }
+  .short{
+    background-color: red;
+  }
+
+
+  .circleRed {
+    float: left;
+    margin-top: 5px;
+    margin-right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: red; /* Cambiar el color aquí */
+    border-radius: 50%;
+  }
+  .buttonNoStyles {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    transition: all 300ms;
+  }
+  .buttonNoStyles:hover{
+    opacity: 0.8;
+  }
+  /*inicio imput y label*/
+.input-basic{
+  display: block;
+  width: 100%;
+  border: 1px solid #2c3034;
+  border-radius: 5px;
+  padding: 12px;
+  outline :none;
+  color: white;
+  
+ 
+
+}
+.floating-text-label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+}
+
+.floating-input:focus + .floating-text-label,
+.floating-input:active + .floating-text-label,
+.floating-input:not(:placeholder-shown) + .floating-text-label 
+{
+  top: 4px;
+  font-size: 0.8rem;
+  background-color:transparent;
+  
+  
+}
+.floating-input:focus {
+  border: 1px solid green;
+}
+/*fin imput y label*/

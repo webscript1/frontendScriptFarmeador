@@ -1,0 +1,55 @@
+
+<div class="vh-100">
+  <section class="d-flex h-100 justify-content-center align-items-center">
+    <div class="col-12 col-sm-7 col-md-6 col-lg-5 col-xl-4 container_form p-5">
+      <h4 class="pb-3 text-secondary">Sing in</h4>
+      <form  [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <input class="text-white w-100 p-2" type="text" name="email" [placeholder]="'email'" formControlName="email">
+          @if (emailControl?.invalid && emailControl?.touched) {
+            <div>
+              @if (emailControl?.hasError('required')) {
+                <div class="text-danger">email requerido</div>
+              }
+              @if (emailControl?.hasError('email')) {
+                <div class="text-danger">Correo electrónico no es válido.</div>
+              }
+            </div>
+          }
+        </div>
+        <div class="mb-1">
+          <input class="text-white w-100 p-2 mb-1" type="password" name="password" [placeholder]="'password'" formControlName="password">
+          @if (passwordControl?.invalid && passwordControl?.touched) {
+            <div>
+              @if (passwordControl?.hasError('required')) {
+                <div class="text-danger">password requerida.</div>
+              }
+            </div>
+          }
+          <div style="height: 30px;">
+            <span class="text-danger">{{message}}</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          @if (!loading) {
+            <button [disabled]="miFormulario.invalid" type="submit" class="btn w-100 py-2">Iniciar session</button>
+          }
+          @if (loading) {
+            <button class="btn w-100 py-2 " type="button" disabled>
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+              <span class="visually-hidden" role="status">Loading...</span>
+            </button>
+          }
+        </div>
+        <div class="text-center">
+          <span class=" crear-user  text-center">
+            <a class="text-color " [routerLink]="['/sing-up']">crear usuario</a>
+          </span>
+        </div>
+
+      </form>
+
+    </div>
+  </section>
+</div>

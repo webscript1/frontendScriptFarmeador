@@ -1,0 +1,192 @@
+<section class="row justify-content-center">
+  <form  class="p-1 p-sm-3 pt-3 mt-3  col-12 col-sm-12 col-md-12 col-lg-11 col-xl-10 form-activador position-relative" [formGroup]="miFormulario" (ngSubmit)="onSubmit(miFormulario)" >
+    <button (click)="cancelCreateInstancia()" class="btn btn-danger float-end"> <i class="bi bi-x-lg"></i></button>
+    <div class="mt-3">
+      <h4 class="text-white text-center">
+      create instance</h4>
+    </div>
+
+    <div class="mb-2 py-1 mt-2" style="position: relative;">
+
+
+      <input  name="name" placeholder="" type="text" class="input-basic floating-input " formControlName="name">
+
+
+      <label class="ms-3 floating-text-label text-white" for="name">name</label>
+
+
+
+    </div>
+    <div class="row">
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input   placeholder="" class="input-basic floating-input " type="number" name="capital" formControlName="capital" required>
+
+
+        <label class="ms-3 floating-text-label text-white" for="capital">capital</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input   placeholder="" class="input-basic floating-input " type="number" name="risk" formControlName="risk">
+
+
+        <label class="ms-3 floating-text-label text-white" for="risk">risk</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="tpRelation" placeholder=""  class="input-basic floating-input " type="number" formControlName="tpRelation">
+
+
+        <label class="ms-3 floating-text-label text-white" for="tpRelation">tpRelation</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="fee" placeholder=""  class="input-basic floating-input " type="number" formControlName="fee">
+
+
+        <label class="ms-3 floating-text-label text-white" for="fee">fee</label>
+
+
+
+      </div>
+
+    </div>
+    <div class="input-group mb-3 mt-3 bg-secondary">
+      <select class="form-control selected-side text-white " name="service" formControlName="service" >
+        <option [selected]="true" disabled class="">service</option>
+        <option value="rsi">rsi</option>
+        <option value="last 30m">last 30m</option>
+      </select>
+    </div>
+    <div class="input-group mb-3 mt-3 bg-secondary">
+      <select class="form-control selected-side text-white " name="intervalrsi" formControlName="intervalrsi">
+        <option [selected]="true" disabled class="">interval rsi</option>
+        <option value="3m">3m</option>
+        <option value="5m">5m</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="positionN" placeholder=""  class="input-basic floating-input " type="number" formControlName="positionN">
+
+
+        <label class="ms-3 floating-text-label text-white" for="positionN">positionN</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="volume" placeholder=""  class="input-basic floating-input " type="number" formControlName="volume">
+
+
+        <label class="ms-3 floating-text-label text-white" for="volume">volume</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="rsiup" placeholder=""  class="input-basic floating-input " type="number" formControlName="rsiup">
+
+
+        <label class="ms-3 floating-text-label text-white" for="rsiup">rsi up</label>
+
+
+
+      </div>
+
+
+    </div>
+    <div class="row">
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="rsidown" placeholder=""  class="input-basic floating-input " type="number" formControlName="rsidown">
+
+
+        <label class="ms-3 floating-text-label text-white" for="rsidown">rsi down</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="rsiBtcUp" placeholder=""  class="input-basic floating-input " type="number" formControlName="rsiBtcUp">
+
+
+        <label class="ms-3 floating-text-label text-white" for="rsiBtcUp">rsi Btc Up</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="rsiBtcDown" placeholder=""  class="input-basic floating-input " type="number" formControlName="rsiBtcDown">
+
+
+        <label class="ms-3 floating-text-label text-white" for="rsiBtcDown">rsi Btc Down</label>
+
+
+
+      </div>
+      <div class="mb-2 py-1 mt-2 col-12 col-sm-4" style="position: relative;">
+
+
+        <input  name="priceSymbol" placeholder=""  class="input-basic floating-input " type="number" formControlName="priceSymbol">
+
+
+        <label class="ms-3 floating-text-label text-white" for="priceSymbol">price Symbol</label>
+
+
+
+      </div>
+
+    </div>
+    <div class="mb-2 py-1 mt-2" style="position: relative;">
+
+
+      <input  name="blacklist" placeholder=""  class="input-basic floating-input " type="text" formControlName="blacklist">
+
+
+      <label class="ms-3 floating-text-label text-white" for="blacklist">black list symbols</label>
+
+
+
+    </div>
+    @if (!loading) {
+      <div class="mb-2 py-1 mt-4">
+        <button type="submit" [disabled]="miFormulario.invalid"  class="btn btn-success w-100">create</button>
+      </div>
+    }
+
+
+    @if (loading) {
+      <div class="mb-2 py-1  mt-4">
+        <button class="btn btn-primary w-100" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          <span class="visually-hidden" role="status">Loading...</span>
+        </button>
+      </div>
+    }
+  </form>
+</section>

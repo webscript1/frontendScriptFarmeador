@@ -1,0 +1,145 @@
+
+<section class="row justify-content-center mx-2">
+  <div class="table-responsive col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mt-5 p-3">
+    <div class="input-group mb-3 bg-secondary">
+      <select class="form-control " #side (change)="selectSide($event)">
+        <option selected disabled value="">Seleccione una opción</option>
+        <option value="Buy">Long</option>
+        <option value="Sell">Short</option>
+      </select>
+    </div>
+    <table class="table table-dark ">
+      <thead >
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody style="background-color: red;">
+        <tr>
+          <td>symbol</td>
+          <td><input [(ngModel)]="gestion_atr.symbol" name="symbol" type="text" class="form-control"></td>
+        </tr>
+        <tr>
+          <td class="ms-2">Account size</td>
+          <td><input [(ngModel)]="gestion_atr.capital"  class="form-control" type="number" name="acountsize" id=""></td>
+          <td><span class="ps-2">$</span></td>
+        </tr>
+        <tr>
+          <td>Risk</td>
+          <td><input [(ngModel)]="gestion_atr.risk"  class="form-control" type="number" name="risk" id=""></td>
+          <td><span class="ps-2">%</span></td>
+        </tr>
+        <tr>
+          <td>Entry price</td>
+          <td><input [(ngModel)]="gestion_atr.entryPrice"  name="entryprice" class="form-control" type="number"></td>
+          <td><span class="ps-2">$</span></td>
+        </tr>
+        <tr>
+          <td>ATR</td>
+          <td><input [(ngModel)]="gestion_atr.atr"  class="form-control" name="atr" type="number"></td>
+          <td><span class="ps-2">?</span></td>
+        </tr>
+
+        <tr>
+          <td>tp/relation</td>
+          <td><input  [(ngModel)]="gestion_atr.tpRelacion" name="tpRelation" class="form-control" type="number"></td>
+        </tr>
+
+      </tbody>
+    </table>
+    @if (!loadingCalcularGestion) {
+      <div>
+            <button (click)="calcular_gestion()" type="submit" [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+                                'btn-danger':gestion_atr.side==='Sell',
+                                'btn-secondary': gestion_atr.side !== 'Buy' && gestion_atr.side !== 'Sell'}"  type="submit" class="btn btn-success col-12">Calcular</button>
+      </div>
+    }
+    @if (loadingCalcularGestion) {
+      <div>
+            <button  [ngClass]="{'btn-success': gestion_atr.side==='Buy',
+            'btn-danger':gestion_atr.side==='Sell'}" class="btn  col-12" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          <span class="visually-hidden" role="status">Loading...</span>
+        </button>
+      </div>
+    }
+
+  </div>
+
+  @if (detallesGestion) {
+    <div class="mt-5 col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+      <table class="table table-dark table-striped">
+        <thead >
+          <tr>
+            <th colspan="2">info position:</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <td>monedas:</td>
+            <td>{{detallesGestion.qty}}</td>
+          </tr>
+          <tr>
+            <td>USDT:</td>
+            <td>{{detallesGestion.usdtRequerido}}$</td>
+          </tr>
+          <tr>
+            <td>
+              <span><strong>MaxOrderQty:</strong>  </span>
+            </td>
+            <td>
+              {{detallesGestion.maxOrderQty}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span><strong>MinOrderQty</strong> </span>
+            </td>
+            <td>
+              {{detallesGestion.minOrderQty}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-dark table-striped">
+        <thead >
+          <tr>
+            <th class="text-danger" >info stop loss:</th>
+            <td><strong class="text-danger">{{detallesGestion.sl}}$</strong></td>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <td>price Sl:</td>
+            <td>{{detallesGestion.stopLossPrice}}$</td>
+          </tr>
+          <tr>
+            <td>porcentageSl:</td>
+            <td>{{detallesGestion.distanciaPorcentajeSl}}%</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-dark table-striped">
+        <thead >
+          <tr>
+            <th class="text-success" >info Tp:</th>
+            <td><strong class="text-success">{{detallesGestion.tp}}$</strong></td>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <td>price Tp:</td>
+            <td>{{detallesGestion.tpPrecio}}$</td>
+          </tr>
+          <tr>
+            <td>porcentageTp:</td>
+            <td>{{detallesGestion.tpPorcentaje}}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  }
+
+</section>
